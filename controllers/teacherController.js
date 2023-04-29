@@ -45,10 +45,7 @@ module.exports.registerTeacherController = asyncHandler(async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, salt);
 
   // get the path to the image
-  const imageUrl = path.join(
-    __dirname,
-    `../public/images/${req.file.filename}`
-  );
+  const imageUrl = req.file.path;
 
   // generate verify code Math.floor(Math.random() * (max - min + 1)) + min;
   const verifyCode = Math.floor(Math.random() * 90000) + 10000;
@@ -296,7 +293,7 @@ module.exports.updateTeacherImageController = asyncHandler(async (req, res) => {
 
   let imageUrl = teacher.imageUrl;
 
-  const unixPath = path.posix.join(...imageUrl.split(path.sep));
+  const unixPath = path.posix.join(__dirname, ...imageUrl.split(path.sep));
 
   fs.unlink(unixPath, (err) => {
     if (err) {
