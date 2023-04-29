@@ -18,7 +18,7 @@ const app = express();
 
 // to access to image
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use("/static", express.static(path.join("/opt/render/project/src/public")));
 
 // dotenv
 require("dotenv").config();
