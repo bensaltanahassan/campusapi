@@ -17,7 +17,8 @@ const notificationRouter = require("./routes/notificationsRouter.js");
 const app = express();
 
 // to access to image
-app.use("/images", express.static(path.join(__dirname, "public/images")));
+
+app.use("/images", express.static(path.join(__dirname, "assets")));
 
 // dotenv
 require("dotenv").config();

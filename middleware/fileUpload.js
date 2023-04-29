@@ -4,7 +4,21 @@ const multer = require("multer");
 // photo storage
 const photoStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "../public/images");
+    cb(null, path.join(__dirname, "../assets"));
+  },
+  filename: (req, file, cb) => {
+    if (file) {
+      cb(null, new Date().toISOString().replace(/:/g, "-") + file.originalname);
+    } else {
+      cb(null, false);
+    }
+  },
+});
+
+// file storage
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, "../files"));
   },
   filename: (req, file, cb) => {
     if (file) {
@@ -33,20 +47,6 @@ const photoUpload = multer({
   },
   limits: {
     fileSize: 10 * 1024 * 1024, // 10 megabyte
-  },
-});
-
-// file storage
-const fileStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "../files"));
-  },
-  filename: (req, file, cb) => {
-    if (file) {
-      cb(null, new Date().toISOString().replace(/:/g, "-") + file.originalname);
-    } else {
-      cb(null, false);
-    }
   },
 });
 
