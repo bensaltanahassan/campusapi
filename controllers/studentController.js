@@ -100,16 +100,19 @@ module.exports.loginStudentController = asyncHandler(async (req, res) => {
       .status(400)
       .json({ status: false, message: "Mot de passe incorrect" });
   }
-  if (student.isAccountVerified === false) {
-    return res.status(400).json({
-      status: false,
-      message: "Compte non vérifié! Veuillez vérifier votre compte.",
-    });
-  }
 
   student = await Student.findById(student._id)
     .select("-password")
     .select("-verifyCode");
+
+  if (student.isAccountVerified === false) {
+    return res.status(400).json({
+      status: false,
+      student,
+      message: "Compte non vérifié! Veuillez vérifier votre compte.",
+    });
+  }
+
   // generate token for student
   const token = jwt.sign({ id: student._id }, process.env.JWT_SECRET);
   let result = { ...student.toObject(), token };

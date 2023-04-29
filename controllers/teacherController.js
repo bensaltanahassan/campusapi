@@ -101,19 +101,20 @@ module.exports.loginTeacherController = asyncHandler(async (req, res) => {
     });
   }
 
-  if (teacher.isAccountVerified === false) {
-    return res.status(400).json({
-      status: false,
-      message: "Compte non vérifié! Veuillez vérifier votre compte.",
-    });
-  }
-
   // generate token for teacher
   const accessToken = jwt.sign({ id: teacher._id }, process.env.JWT_SECRET);
 
   teacher = await Teacher.findById(teacher._id)
     .select("-password")
     .select("-verifyCode");
+
+  if (teacher.isAccountVerified === false) {
+    return res.status(400).json({
+      status: false,
+      teacher,
+      message: "Compte non vérifié! Veuillez vérifier votre compte.",
+    });
+  }
 
   let result = { ...teacher.toObject() };
   result.token = accessToken;
