@@ -18,7 +18,7 @@ const app = express();
 
 // to access to image
 
-app.use("/images", express.static(path.join(__dirname, "assets")));
+app.use("/images", express.static(path.join(__dirname, "public/images")));
 
 // dotenv
 require("dotenv").config();
