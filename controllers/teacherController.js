@@ -46,6 +46,7 @@ module.exports.registerTeacherController = asyncHandler(async (req, res) => {
 
   // get the path to the image
   const imageUrl = req.file.path;
+  console.log(imageUrl);
 
   // generate verify code Math.floor(Math.random() * (max - min + 1)) + min;
   const verifyCode = Math.floor(Math.random() * 90000) + 10000;
