@@ -47,45 +47,6 @@ app.use(errorHandler);
 //mongoose
 connectToDB();
 
-// socket
-const http = require("http");
-const server = http.createServer(app);
-const io = require("socket.io")(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-  },
-});
-
-let onlineUsers = [];
-
-const addNewUser = (userId, userType, socketId) => {
-  !onlineUsers.some((user) => user.userId === userId) &&
-    onlineUsers.push({ userId, userType, socketId });
-};
-
-const removeUser = (socketId) => {
-  onlineUsers = onlineUsers.filter((user) => user.socketId !== socketId);
-};
-
-const getUser = (userId) => {
-  return onlineUsers.find((user) => user.userId === userId);
-};
-
-io.on("connection", (socket) => {
-  console.log("a user connected");
-  socket.on("newUser", (userId, userType) => {
-    addNewUser(userId, userType, socket.id);
-    io.emit("getUsers", onlineUsers);
-  });
-
-  socket.on("disconnect", () => {
-    console.log("a user disconnected");
-    removeUser(socket.id);
-    io.emit("getUsers", onlineUsers);
-  });
-});
-
 //Run the server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
