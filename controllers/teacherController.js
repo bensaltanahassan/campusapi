@@ -100,6 +100,14 @@ module.exports.loginTeacherController = asyncHandler(async (req, res) => {
       message: "Mot de passe incorrect",
     });
   }
+
+  if (teacher.isAccountVerified === false) {
+    return res.status(400).json({
+      status: false,
+      message: "Compte non vérifié! Veuillez vérifier votre compte.",
+    });
+  }
+
   // generate token for teacher
   const accessToken = jwt.sign({ id: teacher._id }, process.env.JWT_SECRET);
 
