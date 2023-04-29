@@ -49,7 +49,7 @@ connectToDB();
 
 //Run the server
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(
     `server running on port ${PORT} on mode ${process.env.NODE_ENV}... `
   );
