@@ -828,7 +828,12 @@ module.exports.evaluateTaskController = asyncHandler(async (req, res) => {
   const noteModule = mark.mark;
 
   if (!noteModule) {
-    mark.mark = 0;
+    if (point < 0) {
+      mark.mark = 0;
+    } else {
+      mark.mark = point;
+    }
+
     await mark.save();
     return res
       .status(200)
