@@ -78,7 +78,7 @@ module.exports.searchModuleController = asyncHandler(async (req, res) => {
  */
 
 module.exports.createModuleController = asyncHandler(async (req, res) => {
-  const { name, teacherId, classe, color, identifiant } = req.body;
+  const { name, teacherId, classe, color, identifiant, cycle } = req.body;
 
   let module = await Module.findOne({
     identifiant,
@@ -94,6 +94,7 @@ module.exports.createModuleController = asyncHandler(async (req, res) => {
     classe,
     identifiant,
     color,
+    cycle,
   });
 
   await module.save();
@@ -218,6 +219,9 @@ module.exports.getStatistiquesModuleController = asyncHandler(
         .status(400)
         .json({ status: false, message: "Module introuvable" });
 
+    const noteValidation = module.cycle === "préparatoire" ? 10 : 12;
+    const noteElim = module.cycle === "préparatoire" ? 6 : 7;
+
     // ====================================
     // get the number of docs
     const files = await File.find({
@@ -252,7 +256,7 @@ module.exports.getStatistiquesModuleController = asyncHandler(
     // get note max/min/avg
     let studentsValidated = [];
     let studentsNotValidated = [];
-    let studentLessThan7 = [];
+    let studentLessThanElim = [];
     let max = 0;
     let min = 20;
     let avg = 0;
@@ -266,14 +270,14 @@ module.exports.getStatistiquesModuleController = asyncHandler(
           module: moduleId,
         });
         if (mark) {
-          if (mark.mark >= 12) {
+          if (mark.mark >= noteValidation) {
             studentsValidated.push(mark);
           }
-          if (mark.mark < 12) {
+          if (mark.mark < noteValidation) {
             studentsNotValidated.push(mark);
           }
-          if (mark.mark < 7) {
-            studentLessThan7.push(mark);
+          if (mark.mark < noteElim) {
+            studentLessThanElim.push(mark);
           }
           if (mark.mark > max) {
             max = mark.mark;
@@ -299,6 +303,7 @@ module.exports.getStatistiquesModuleController = asyncHandler(
 
     res.status(200).json({
       status: true,
+      module,
       statistiques: {
         files: {
           docs: files.length,
@@ -312,7 +317,7 @@ module.exports.getStatistiquesModuleController = asyncHandler(
           students,
           studentsValidated,
           studentsNotValidated,
-          studentLessThan7,
+          studentLessThanElim,
         },
         marks: {
           max: maxMark,

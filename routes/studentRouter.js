@@ -10,8 +10,6 @@ const {
 const verifyToken = require("../middleware/verifyToken");
 const studentRouter = require("express").Router();
 
-studentRouter.put("/:studentId", verifyToken, updateStudentController);
-
 studentRouter.post("/register", registerStudentController);
 studentRouter.post("/login", loginStudentController);
 studentRouter.post("/forgetpassword", forgetPasswordStudentController);
@@ -19,4 +17,5 @@ studentRouter.post("/verifycode", verifyCodeStudentController);
 studentRouter.put("/changepassword", changePasswordCodeStudentController);
 studentRouter.post("/resendCode", resendCodeController);
 
+studentRouter.put("/:studentId", verifyToken, updateStudentController);
 module.exports = studentRouter;

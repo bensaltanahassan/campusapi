@@ -4,6 +4,11 @@ const mongoose = require("mongoose");
 const moduleSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
+    cycle: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     classe: {
       type: String,
       required: true,
