@@ -6,7 +6,7 @@ const sendWhatsappMessage = (name, verifyCode, phone) => {
     method: "POST",
     hostname: "api.ultramsg.com",
     port: null,
-    path: "/instance47086/messages/chat",
+    path: "/instance50589/messages/chat",
     headers: {
       "content-type": "application/x-www-form-urlencoded",
     },
@@ -28,7 +28,7 @@ const sendWhatsappMessage = (name, verifyCode, phone) => {
   const phoneToSend = phone.substring(1);
 
   var postData = qs.stringify({
-    token: "0qpr6acryf57htjj",
+    token: "x69hfdlg8b8r71ux",
     to: `+212${phoneToSend}`,
     body: `Bonjour ${name}, votre code de vérification est ${verifyCode}`,
   });
